@@ -488,7 +488,8 @@ withAttributeAndRelationshipValuesFromManagedObject:(NSManagedObject *)managedOb
                                                 [context performBlockAndWait:^{
                                                     for (NSManagedObject *childObject in childObjects) {
                                                         NSManagedObject *parentObject = [context objectWithID:childObject.objectID];
-                                                        [context refreshObject:parentObject mergeChanges:YES];
+                                                        // DME - Changed 'mergeChanges' to NO to avoid duplicate inserts
+                                                        [context refreshObject:parentObject mergeChanges:NO];
                                                     }
                                                 }];
                                                 
