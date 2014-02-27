@@ -655,6 +655,8 @@ withAttributeAndRelationshipValuesFromManagedObject:(NSManagedObject *)managedOb
                     [self updateBackingObject:backingObject withAttributeAndRelationshipValuesFromManagedObject:updatedObject];
                     [backingContext save:nil];
                 }];
+
+                [context refreshObject:updatedObject mergeChanges:YES];
                 continue;
             }
             
