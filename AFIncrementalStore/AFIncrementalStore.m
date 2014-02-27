@@ -382,7 +382,8 @@ withAttributeAndRelationshipValuesFromManagedObject:(NSManagedObject *)managedOb
             [backingContext performBlockAndWait:^{
                 if (backingObjectID) {
                     backingObject = [backingContext existingObjectWithID:backingObjectID error:nil];
-                } else {
+                }
+                if (!backingObject) {
                     backingObject = [NSEntityDescription insertNewObjectForEntityForName:entity.name inManagedObjectContext:backingContext];
                     [backingObject.managedObjectContext obtainPermanentIDsForObjects:[NSArray arrayWithObject:backingObject] error:nil];
                 }
