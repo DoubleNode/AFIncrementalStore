@@ -970,7 +970,19 @@ withAttributeAndRelationshipValuesFromManagedObject:(NSManagedObject *)managedOb
             [[backingRelationshipObject managedObjectContext] performBlockAndWait:^
              {
                  NSString *resourceIdentifier = [backingRelationshipObject valueForKeyPath:kAFIncrementalStoreResourceIdentifierAttributeName];
-                 objectID = [self objectIDForEntity:relationship.destinationEntity withResourceIdentifier:resourceIdentifier];
+
+                 NSManagedObject*       backingChildObject  = backingRelationshipObject;
+                 NSEntityDescription*   relationshipEntity  = relationship.destinationEntity;
+                 NSEntityDescription*   backingChildEntity  = backingChildObject.entity;
+
+                 if ([relationshipEntity.name isEqualToString:backingChildEntity.name])
+                 {
+                     objectID = [self objectIDForEntity:relationshipEntity withResourceIdentifier:resourceIdentifier];
+                 }
+                 else
+                 {
+                     objectID = [self objectIDForEntity:backingChildEntity withResourceIdentifier:resourceIdentifier];
+                 }
              }];
             
             return objectID ?: [NSNull null];
