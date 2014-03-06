@@ -424,7 +424,20 @@ withAttributeAndRelationshipValuesFromManagedObject:(NSManagedObject *)managedOb
                                             [managedObject setValue:[NSSet setWithArray:managedObjects] forKey:relationship.name];
                                         }
                                     } else {
-                                        [managedObject setValue:[managedObjects lastObject] forKey:relationship.name];
+                                        NSManagedObject*    tempObj1    = [managedObject valueForKey:relationship.name];
+                                        NSManagedObject*    tempObj2    = [managedObjects lastObject];
+                                        if ([tempObj1.objectID isEqual:tempObj2.objectID])
+                                        {
+                                            NSLog(@"*** MATCH *** tempObj1 = %@ : %@", tempObj1.entity.name, tempObj1.objectID);
+                                            NSLog(@"*** MATCH *** tempObj2 = %@ : %@", tempObj2.entity.name, tempObj2.objectID);
+                                            [managedObject setValue:tempObj2 forKey:relationship.name];
+                                        }
+                                        else
+                                        {
+                                            NSLog(@"*** NO MATCH *** tempObj1 = %@ : %@", tempObj1.entity.name, tempObj1.objectID);
+                                            NSLog(@"*** NO MATCH *** tempObj2 = %@ : %@", tempObj2.entity.name, tempObj2.objectID);
+                                            [managedObject setValue:tempObj2 forKey:relationship.name];
+                                        }
                                     }
                                 }];
                     [[backingObject managedObjectContext] performBlockAndWait:^
