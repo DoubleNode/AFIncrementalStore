@@ -361,7 +361,7 @@ withAttributeAndRelationshipValuesFromManagedObject:(NSManagedObject *)managedOb
     NSMutableArray *mutableBackingObjects = [NSMutableArray array];
     
     [representationsByEntityName enumerateKeysAndObjectsUsingBlock:^(id name, id representations, BOOL *stop) {
-        if ([representations isEqual: [NSNull null]] || [representations count] == 0) {
+        if ([representations isEqual:[NSNull null]] || [representations count] == 0) {
             return;
         }
         NSEntityDescription *entity = [NSEntityDescription entityForName:name inManagedObjectContext:context];
@@ -376,10 +376,9 @@ withAttributeAndRelationshipValuesFromManagedObject:(NSManagedObject *)managedOb
             [self performWithContext:context
                         blockAndWait:^{
                             managedObject = [context existingObjectWithID:[self objectIDForEntity:entity withResourceIdentifier:resourceIdentifier] error:nil];
+                            [managedObject setValuesForKeysWithDictionary:attributes];
                         }];
 
-            [managedObject setValuesForKeysWithDictionary:attributes];
-            
             NSManagedObjectID *backingObjectID = [self objectIDForBackingObjectForEntity:entity withResourceIdentifier:resourceIdentifier];
             __block NSManagedObject *backingObject = nil;
             [backingContext performBlockAndWait:^{
